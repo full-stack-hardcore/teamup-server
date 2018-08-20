@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as jwt from 'jsonwebtoken';
+import * as expressValidator from 'express-validator/check';
 
 class Token {
     constructor(public token) {
@@ -20,6 +21,8 @@ declare global {
   }
 
 const router = express.Router();
+
+const { check, validationResult } = require('express-validator/check');
 
 // router.use(bodyParser.json());
 // router.use(bodyParser.urlencoded({
@@ -56,7 +59,16 @@ router.post('/secure', verifyToken, (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', [
+    check('user').isLength({ min: 3 }).withMessage('user must be at least 3 chars long'),
+    check('password').isLength({ min: 5 }).withMessage('password must be at least 5 chars long')
+], (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+
     // Mock user
     const user = {
         id: 1,
