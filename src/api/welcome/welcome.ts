@@ -23,17 +23,18 @@ router.post(
             res.send(error);
         }
     }
+  },
 );
 
 router.post('/data', (req, res) => {
-    const postBody = req.body;
-    console.log(postBody);
-    res.status(200).send(req.body);
-  });
+  const postBody = req.body;
+  console.log(postBody);
+  res.status(200).send(req.body);
+});
 
-router.post('/users', function (req, res) {
-    console.log(req.body);
-    res.status(200).send(req.body);
+router.post('/users', function(req, res) {
+  console.log(req.body);
+  res.status(200).send(req.body);
 });
 
 export = router;

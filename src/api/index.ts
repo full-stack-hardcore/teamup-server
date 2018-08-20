@@ -8,7 +8,7 @@ router.use('/welcome', welcomeRouter);
 router.use('/login', loginRouter);
 
 router.get('/', (req, res) => {
-    res.send('Hello from the API');
+  res.send('Hello from the API');
 });
 
 export = router;
