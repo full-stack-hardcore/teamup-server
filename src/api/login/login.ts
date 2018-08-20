@@ -22,7 +22,7 @@ declare global {
 
 const router = express.Router();
 
-const { check, validationResult } = require('express-validator/check');
+const { checkSchema, validationResult } = require('express-validator/check');
 
 // router.use(bodyParser.json());
 // router.use(bodyParser.urlencoded({
@@ -59,25 +59,34 @@ router.post('/secure', verifyToken, (req, res) => {
     });
 });
 
-router.post('/', [
-    check('user').isLength({ min: 3 }).withMessage('user must be at least 3 chars long'),
-    check('password').isLength({ min: 5 }).withMessage('password must be at least 5 chars long')
-], (req, res) => {
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-    }
-
+router.post('/', checkSchema({
+    user: {
+      isEmail: {
+        isEmail: true,
+        errorMessage: 'Invalid email',
+      }
+    },
+    password: {
+      isLength: {
+        errorMessage: 'Password should be at least 5 chars long',
+        options: { min: 5 }
+      }
+    },
+  }), (req, res) => {
+    
     // Mock user
     const user = {
         id: 1,
         username: 'lucas',
         email: 'lucas@gmail.com'
     }
+    const errors = validationResult(req);
 
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
     // Mock database request for user login
-    if(req.body.user == "lucas" && req.body.password == 'safepass'){
+    if(req.body.user == "lucas@gmail.com" && req.body.password == 'safepass'){
         jwt.sign({user: user}, 'secretKeyHere', { expiresIn: '30s' } ,(err, token) => {
             res.json({
                 token: token
