@@ -1,6 +1,8 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 
+import errorMiddleware from 'error-middleware';
+
 import * as masterRouter from './api';
 
 const app: express.Application = express();
@@ -10,6 +12,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+
+app.use(errorMiddleware);
 
 app.use('/api', masterRouter);
 app.listen(port, () => {

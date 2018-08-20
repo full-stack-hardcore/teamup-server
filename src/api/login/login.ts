@@ -1,5 +1,8 @@
 import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
+import { BadRequestError, ValidationError, NotFoundError } from 'error-middleware/errors';
+import { validationMiddleware } from 'error-middleware/middlewares';
+ 
 
 class Token {
     constructor(public token) {
@@ -28,26 +31,34 @@ router.get('/', verifyToken, (req, res) => {
 
 router.get('/secure', verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretKeyHere', (err, authData) => {
-        if(err) {
-            res.sendStatus(403);
-        } else {
-            res.json({
-                message: 'Secure Route',
-                authData: authData,
-            });
+        try{
+            if(err) {
+                throw new BadRequestError('Not allowed.');
+            } else {
+                res.json({
+                    message: 'Secure Route',
+                    authData: authData,
+                });
+            }
+        } catch(e) {
+            res.send(e)
         }
     });
 });
 
 router.post('/secure', verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretKeyHere', (err, authData) => {
-        if(err) {
-            res.sendStatus(403);
-        } else {
-            res.json({
-                message: 'Secure Route',
-                authData: authData,
-            });
+        try {
+            if(err) {
+                throw new BadRequestError('Not allowed.');
+            } else {
+                res.json({
+                    message: 'Secure Route',
+                    authData: authData,
+                });
+            }
+        } catch(e) {
+            res.send(e)
         }
     });
 });
@@ -74,30 +85,40 @@ router.post('/', checkSchema({
         email: 'lucas@gmail.com'
     }
     const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-    }
-    
-    // Mock database request for user login
-    if(req.body.user == "lucas@gmail.com" && req.body.password == 'safepass'){
-        jwt.sign({user: user}, 'secretKeyHere', { expiresIn: '30s' } ,(err, token) => {
-            res.json({
-                token: token
+    try {
+        if (!errors.isEmpty()) {
+            throw new ValidationError(errors.array());
+        }
+        
+        // Mock database request for user login
+        if(req.body.user == "lucas@gmail.com" && req.body.password == 'safepass'){
+            jwt.sign({user: user}, 'secretKeyHere', { expiresIn: '30s' } ,(err, token) => {
+                res.json({
+                    token: token
+                });
             });
-        });
-    } else {
-        res.send('Your credentials are invalid');
+        } else {
+            throw new BadRequestError({
+                error: "Your credentials are invalid"
+              });
+        }
+    } catch(e) {
+        res.send(e)
     }
 });
 
 function verifyToken(req, res, next) {
     const authToken = req.headers['authorization'];
-    if(typeof authToken !== 'undefined') {
-        req.token= authToken;
-        next();
-    } else {
-        res.sendStatus(403);
+
+    try {
+        if(typeof authToken !== 'undefined') {
+            req.token= authToken;
+            next();
+        } else {
+            throw new BadRequestError('Not allowed.');
+        }        
+    } catch(e) {
+        res.send(e)
     }
 }
 
