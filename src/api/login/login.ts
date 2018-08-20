@@ -1,7 +1,5 @@
 import * as express from 'express';
-import * as bodyParser from 'body-parser';
 import * as jwt from 'jsonwebtoken';
-import * as expressValidator from 'express-validator/check';
 
 class Token {
     constructor(public token) {
@@ -23,11 +21,6 @@ declare global {
 const router = express.Router();
 
 const { checkSchema, validationResult } = require('express-validator/check');
-
-// router.use(bodyParser.json());
-// router.use(bodyParser.urlencoded({
-//   extended: true
-// }));
 
 router.get('/', verifyToken, (req, res) => {
     res.send('Hello from login');
@@ -84,7 +77,8 @@ router.post('/', checkSchema({
 
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
-      }
+    }
+    
     // Mock database request for user login
     if(req.body.user == "lucas@gmail.com" && req.body.password == 'safepass'){
         jwt.sign({user: user}, 'secretKeyHere', { expiresIn: '30s' } ,(err, token) => {
@@ -97,22 +91,14 @@ router.post('/', checkSchema({
     }
 });
 
-// Verify Token
-
 function verifyToken(req, res, next) {
-    // Get auth header value
     const authToken = req.headers['authorization'];
-    // Check if token is undefined
     if(typeof authToken !== 'undefined') {
-        // Set the token
         req.token= authToken;
-        // Next middleware
         next();
     } else {
-        // Forbidden
         res.sendStatus(403);
     }
-
 }
 
 export = router;
