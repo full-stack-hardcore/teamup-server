@@ -8,8 +8,8 @@ router.use('/welcome', welcomeRouter);
 router.use('/login', loginRouter);
 
 router.get('/', (req, res) => {
-    // Reply with a hello world when no name param is provided
-    res.send('Hello from the API');
+  // Reply with a hello world when no name param is provided
+  res.send('Hello from the API');
 });
 
 export = router;

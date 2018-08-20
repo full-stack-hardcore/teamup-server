@@ -4,7 +4,6 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 
-
 // Import WelcomeController from controllers entry point
 import * as masterRouter from './api';
 
@@ -15,15 +14,16 @@ const port: string = process.env.PORT || '3000';
 
 // Mount the WelcomeController at the /welcome route
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  }),
+);
 
 app.use('/api', masterRouter);
 
-
 // Serve the application at the given port
 app.listen(port, () => {
-    // Success callback
-    console.log(`Listening at http://localhost:${port}/`);
+  // Success callback
+  console.log(`Listening at http://localhost:${port}/`);
 });
