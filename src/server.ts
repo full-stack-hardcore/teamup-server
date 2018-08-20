@@ -6,7 +6,7 @@ import * as bodyParser from 'body-parser';
 
 
 // Import WelcomeController from controllers entry point
-import * as masterRouter from './routes';
+import * as masterRouter from './api';
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -14,12 +14,13 @@ const app: express.Application = express();
 const port: string = process.env.PORT || '3000';
 
 // Mount the WelcomeController at the /welcome route
-app.use('/', masterRouter);
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+app.use('/api', masterRouter);
+
 
 // Serve the application at the given port
 app.listen(port, () => {

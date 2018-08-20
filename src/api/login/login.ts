@@ -21,10 +21,10 @@ declare global {
 
 const router = express.Router();
 
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({
-  extended: true
-}));
+// router.use(bodyParser.json());
+// router.use(bodyParser.urlencoded({
+//   extended: true
+// }));
 
 router.get('/', verifyToken, (req, res) => {
     res.send('Hello from login');
