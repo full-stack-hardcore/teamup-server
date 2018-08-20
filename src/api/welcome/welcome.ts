@@ -23,7 +23,6 @@ router.post(
             res.send(error);
         }
     }
-  },
 );
 
 router.post('/data', (req, res) => {
