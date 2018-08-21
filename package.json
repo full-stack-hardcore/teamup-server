@@ -6,8 +6,10 @@
     "server": "ts-node src/server.ts",
     "start": "ts-node src/server.ts",
     "watch": "ts-node-dev --poll --no-notify src/server.ts",
+    "watche": "ts-node-dev --poll src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "lint": " tslint -c tslint.json src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,14 +23,15 @@
     "express-validator": "^5.3.0",
     "jsonwebtoken": "^8.3.0",
     "ts-node": "^7.0.0",
-    "ts-node-dev": "^1.0.0-pre.26",
-    "typescript": "^3.0.1"
+    "ts-node-dev": "^1.0.0-pre.26"
   },
   "devDependencies": {
     "husky": "^1.0.0-rc.13",
     "lint-staged": "^7.2.2",
     "prettier": "^1.14.2",
-    "tslint-config-codingwise": "0.0.5"
+    "tslint": "^5.11.0",
+    "tslint-config-codingwise": "0.0.5",
+    "typescript": "^3.0.1"
   },
   "husky": {
     "hooks": {

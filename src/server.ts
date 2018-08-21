@@ -1,5 +1,5 @@
-import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as express from 'express';
 
 import * as masterRouter from './api';
 
@@ -15,6 +15,4 @@ app.use(
 
 app.use('/api', masterRouter);
 
-app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}/`);
-});
+app.listen(port);
