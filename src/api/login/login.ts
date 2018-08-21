@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
 import { BadRequestError, ValidationError, NotFoundError } from 'error-middleware/errors';
 import { validationMiddleware } from 'error-middleware/middlewares';
- 
+import { ValidationParamSchema } from 'express-validator/check';
 
 class Token {
     constructor(public token) {
@@ -31,52 +31,36 @@ router.get('/', verifyToken, (req, res) => {
 
 router.get('/secure', verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretKeyHere', (err, authData) => {
-        try{
-            if(err) {
-                throw new BadRequestError('Not allowed.');
-            } else {
-                res.json({
-                    message: 'Secure Route',
-                    authData: authData,
-                });
-            }
-        } catch(e) {
-            res.send(e)
-        }
+        if(err) {
+            throw new BadRequestError('Not allowed.');
+        } 
+        res.json({
+            message: 'Secure Route',
+            authData: authData,
+        });
     });
 });
 
 router.post('/secure', verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretKeyHere', (err, authData) => {
-        try {
-            if(err) {
-                throw new BadRequestError('Not allowed.');
-            } else {
-                res.json({
-                    message: 'Secure Route',
-                    authData: authData,
-                });
-            }
-        } catch(e) {
-            res.send(e)
-        }
+        if(err) {
+            throw new BadRequestError('Not allowed.');
+        } 
+        res.json({
+            message: 'Secure Route',
+            authData: authData,
+        });
     });
 });
 
-router.post('/', checkSchema({
+const schema: Record<string, ValidationParamSchema> = {
     user: {
-      isEmail: {
         isEmail: true,
-        errorMessage: 'Invalid email',
-      }
+        in: 'query',
     },
-    password: {
-      isLength: {
-        errorMessage: 'Password should be at least 5 chars long',
-        options: { min: 5 }
-      }
-    },
-  }), (req, res) => {
+  };
+
+router.post('/', validationMiddleware(schema), (req, res) => {
     
     // Mock user
     const user = {
