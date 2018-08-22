@@ -4,32 +4,6 @@ import { BadRequestError, ValidationError, NotFoundError, UnauthorizedError } fr
 import { validationMiddleware } from 'error-middleware/middlewares';
 import { ValidationParamSchema } from 'express-validator/check';
 
-class Token {
-    constructor(public token) {
-    }
-  
-    log(message: string) {
-      console.log(this.token, { message });
-    }
-}
-class AuthData {
-    constructor(public authData) {
-    }
-  
-    log(message: string) {
-      console.log(this.authData, { message });
-    }
-}
-
-declare global {
-    namespace Express {
-      interface Request {
-        token: Token,
-        authData: AuthData
-      }
-    }
-  }
-
 const router = express.Router();
 
 const { checkSchema, validationResult } = require('express-validator/check');
@@ -38,21 +12,21 @@ router.get('/', verifyToken, (req, res) => {
     res.send('Hello from login');
 });
 
-router.get('/secure', verifyToken, (req, res) => {
+router.get('/secure', verifyToken, (req:any, res) => {
         res.json({
             message: 'Secure Route',
             authData: req.authData,
         });
 });
 
-router.post('/secure', verifyToken, (req, res) => {
+router.post('/secure', verifyToken, (req:any, res) => {
     res.json({
         message: 'Secure Route',
         authData: req.authData,
     });
 });
 
-const schema: Record<string, ValidationParamSchema> = {
+const schema: any = {
     user: {
         isEmail: true,
         in: 'body',
@@ -77,21 +51,17 @@ router.post('/', validationMiddleware(schema), (req, res) => {
         username: 'lucas',
         email: 'lucas@gmail.com'
     }
-    try {
-        // Mock database request for user login
-        if(req.body.user == "lucas@gmail.com" && req.body.password == 'safepass'){
-            jwt.sign({user: user}, 'secretKeyHere', { expiresIn: '30s' } ,(err, token) => {
-                res.json({
-                    token: token
-                });
+    // Mock database request for user login
+    if(req.body.user == "lucas@gmail.com" && req.body.password == 'safepass'){
+        jwt.sign({user: user}, 'secretKeyHere', { expiresIn: '30s' } ,(err, token) => {
+            res.json({
+                token: token
             });
-        } else {
-            throw new BadRequestError({
-                error: "Your credentials are invalid"
-              });
-        }
-    } catch(e) {
-        res.send(e)
+        });
+    } else {
+        throw new BadRequestError({
+            error: "Your credentials are invalid"
+            });
     }
 });
 
