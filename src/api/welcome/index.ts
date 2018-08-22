@@ -1,8 +1,8 @@
-import * as express from 'express';
-import * as welcomeRouter from './welcome';
+import * as express from 'express'
+import * as welcomeRouter from './welcome'
 
-const router = express.Router();
+const router = express.Router()
 
-router.use('/', welcomeRouter);
+router.use('/', welcomeRouter)
 
-export = router;
+export = router
