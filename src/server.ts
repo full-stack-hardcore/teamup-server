@@ -14,9 +14,10 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-app.use(errorMiddleware);
 
 app.use('/api', masterRouter);
+app.use(errorMiddleware);
+
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}/`);
 });

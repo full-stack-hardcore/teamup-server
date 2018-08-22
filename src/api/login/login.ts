@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
-import { BadRequestError, ValidationError, NotFoundError } from 'error-middleware/errors';
+import { BadRequestError, ValidationError, NotFoundError, UnauthorizedError } from 'error-middleware/errors';
 import { validationMiddleware } from 'error-middleware/middlewares';
 import { ValidationParamSchema } from 'express-validator/check';
 
@@ -11,12 +11,21 @@ class Token {
     log(message: string) {
       console.log(this.token, { message });
     }
-  }
+}
+class AuthData {
+    constructor(public authData) {
+    }
+  
+    log(message: string) {
+      console.log(this.authData, { message });
+    }
+}
 
 declare global {
     namespace Express {
       interface Request {
-        token: Token
+        token: Token,
+        authData: AuthData
       }
     }
   }
@@ -30,34 +39,34 @@ router.get('/', verifyToken, (req, res) => {
 });
 
 router.get('/secure', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretKeyHere', (err, authData) => {
-        if(err) {
-            throw new BadRequestError('Not allowed.');
-        } 
         res.json({
             message: 'Secure Route',
-            authData: authData,
+            authData: req.authData,
         });
-    });
 });
 
 router.post('/secure', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretKeyHere', (err, authData) => {
-        if(err) {
-            throw new BadRequestError('Not allowed.');
-        } 
-        res.json({
-            message: 'Secure Route',
-            authData: authData,
-        });
+    res.json({
+        message: 'Secure Route',
+        authData: req.authData,
     });
 });
 
 const schema: Record<string, ValidationParamSchema> = {
     user: {
         isEmail: true,
-        in: 'query',
+        in: 'body',
+        trim: true,
+        errorMessage: "Invalid email",
     },
+    password: {
+        in: 'body',
+        isLength: {
+            errorMessage: 'Password should be at least 5 chars long and max of 10 chars long',
+            options: { min: 5, max: 10 }
+
+        },
+    }
   };
 
 router.post('/', validationMiddleware(schema), (req, res) => {
@@ -68,12 +77,7 @@ router.post('/', validationMiddleware(schema), (req, res) => {
         username: 'lucas',
         email: 'lucas@gmail.com'
     }
-    const errors = validationResult(req);
     try {
-        if (!errors.isEmpty()) {
-            throw new ValidationError(errors.array());
-        }
-        
         // Mock database request for user login
         if(req.body.user == "lucas@gmail.com" && req.body.password == 'safepass'){
             jwt.sign({user: user}, 'secretKeyHere', { expiresIn: '30s' } ,(err, token) => {
@@ -93,17 +97,13 @@ router.post('/', validationMiddleware(schema), (req, res) => {
 
 function verifyToken(req, res, next) {
     const authToken = req.headers['authorization'];
-
-    try {
-        if(typeof authToken !== 'undefined') {
-            req.token= authToken;
-            next();
-        } else {
-            throw new BadRequestError('Not allowed.');
-        }        
-    } catch(e) {
-        res.send(e)
-    }
+    jwt.verify(authToken, 'secretKeyHere', (err, authData) => {
+        if(err) {
+            throw new UnauthorizedError();
+        }
+        req.authData = authData;     
+        next();
+    });       
 }
 
 export = router;
