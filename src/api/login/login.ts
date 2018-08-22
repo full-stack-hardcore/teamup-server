@@ -3,10 +3,6 @@ import * as jwt from 'jsonwebtoken';
 
 class Token {
   constructor(public token) {}
-
-  log(message: string) {
-    console.log(this.token, { message });
-  }
 }
 
 declare global {
@@ -32,7 +28,7 @@ router.get('/secure', verifyToken, (req, res) => {
     } else {
       res.json({
         message: 'Secure Route',
-        authData: authData,
+        authData: { authData },
       });
     }
   });
@@ -45,7 +41,7 @@ router.post('/secure', verifyToken, (req, res) => {
     } else {
       res.json({
         message: 'Secure Route',
-        authData: authData,
+        authData: { authData },
       });
     }
   });
@@ -77,14 +73,14 @@ router.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+      return res.status(422).json({ errors: errors.array() });
     }
-  
+
     // Mock database request for user login
-    if (req.body.user == 'lucas@gmail.com' && req.body.password == 'safepass') {
-      jwt.sign({ user: user }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
+    if (req.body.user === 'lucas@gmail.com' && req.body.password === 'safepass') {
+      jwt.sign({ user: { user } }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
         res.json({
-          token: token,
+          token: { token },
         });
       });
     } else {
@@ -94,13 +90,13 @@ router.post(
 );
 
 function verifyToken(req, res, next) {
-    const authToken = req.headers['authorization'];
-    if(typeof authToken !== 'undefined') {
-        req.token= authToken;
-        next();
-    } else {
-        res.sendStatus(403);
-    }
+  const authToken = req.headers.authorization;
+  if (typeof authToken !== 'undefined') {
+    req.token = authToken;
+    next();
+  } else {
+    res.sendStatus(403);
+  }
 }
 
 export = router;

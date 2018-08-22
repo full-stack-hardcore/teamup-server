@@ -6,10 +6,9 @@
     "server": "ts-node src/server.ts",
     "start": "ts-node src/server.ts",
     "watch": "ts-node-dev --poll --no-notify src/server.ts",
-    "watche": "ts-node-dev --poll src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "lint": " tslint -c tslint.json src/server.ts"
+    "lint": " tslint src/**/*.ts{,x}"
   },
   "keywords": [],
   "author": "",
