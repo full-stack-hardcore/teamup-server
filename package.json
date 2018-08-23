@@ -7,7 +7,8 @@
     "start": "ts-node src/server.ts",
     "watch": "ts-node-dev --poll --no-notify src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "lint": " tslint src/**/*.ts"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +25,23 @@
     "ts-node": "^7.0.0",
     "ts-node-dev": "^1.0.0-pre.26",
     "typescript": "^3.0.1"
+  },
+  "devDependencies": {
+    "husky": "^1.0.0-rc.13",
+    "lint-staged": "^7.2.2",
+    "prettier": "^1.14.2",
+    "tslint": "^5.11.0",
+    "tslint-config-codingwise": "0.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,scss,md,css}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

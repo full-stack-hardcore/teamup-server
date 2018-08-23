@@ -1,10 +1,8 @@
-import * as express from 'express';
-import * as loginRouter from './login';
-import * as asyncHandler from 'express-async-handler';
+import * as express from 'express'
+import * as loginRouter from './login'
 
+const router = express.Router()
 
-const router = express.Router();
+router.use('/', loginRouter)
 
-router.use('/', loginRouter);
-
-export = router;
+export = router

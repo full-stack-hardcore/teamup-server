@@ -4,13 +4,13 @@ import { BadRequestError, ValidationError, NotFoundError, UnauthorizedError } fr
 import { validationMiddleware } from 'error-middleware/middlewares';
 import { ValidationParamSchema } from 'express-validator/check';
 
-const router = express.Router();
+const router = express.Router()
 
-const { checkSchema, validationResult } = require('express-validator/check');
+const { checkSchema, validationResult } = require('express-validator/check')
 
 router.get('/', verifyToken, (req, res) => {
-    res.send('Hello from login');
-});
+  res.send('Hello from login')
+})
 
 router.get('/secure', verifyToken, (req:any, res) => {
         res.json({
@@ -47,23 +47,24 @@ router.post('/', validationMiddleware(schema), (req, res) => {
     
     // Mock user
     const user = {
-        id: 1,
-        username: 'lucas',
-        email: 'lucas@gmail.com'
+      id: 1,
+      username: 'lucas',
+      email: 'lucas@gmail.com',
     }
     // Mock database request for user login
-    if(req.body.user == "lucas@gmail.com" && req.body.password == 'safepass'){
-        jwt.sign({user: user}, 'secretKeyHere', { expiresIn: '30s' } ,(err, token) => {
-            res.json({
-                token: token
-            });
-        });
+    if (req.body.user === 'lucas@gmail.com' && req.body.password === 'safepass') {
+      jwt.sign({ user: { user } }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
+        res.json({
+          token: { token },
+        })
+      })
     } else {
         throw new BadRequestError({
             error: "Your credentials are invalid"
             });
     }
-});
+  },
+)
 
 function verifyToken(req, res, next) {
     const authToken = req.headers['authorization'];
@@ -76,4 +77,4 @@ function verifyToken(req, res, next) {
     });       
 }
 
-export = router;
+export = router
