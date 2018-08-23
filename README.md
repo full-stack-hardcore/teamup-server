@@ -22,7 +22,13 @@ Install the dependencies
 $ npm install
 ```
 
-Run server
+Run server as developer
+
+```sh
+$ npm run watch
+```
+
+Run server in production environment
 
 ```sh
 $ npm start
