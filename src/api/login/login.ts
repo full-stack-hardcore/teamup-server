@@ -1,17 +1,8 @@
-import * as express from 'express'
-import * as jwt from 'jsonwebtoken'
-
-class Token {
-  constructor(public token) {}
-}
-
-declare global {
-  namespace Express {
-    interface Request {
-      token: Token
-    }
-  }
-}
+import * as express from 'express';
+import * as jwt from 'jsonwebtoken';
+import { BadRequestError, ValidationError, NotFoundError, UnauthorizedError } from 'error-middleware/errors';
+import { validationMiddleware } from 'error-middleware/middlewares';
+import { ValidationParamSchema } from 'express-validator/check';
 
 const router = express.Router()
 
@@ -21,61 +12,45 @@ router.get('/', verifyToken, (req, res) => {
   res.send('Hello from login')
 })
 
-router.get('/secure', verifyToken, (req, res) => {
-  jwt.verify(req.token, 'secretKeyHere', (err, authData) => {
-    if (err) {
-      res.sendStatus(403)
-    } else {
-      res.json({
-        message: 'Secure Route',
-        authData: { authData },
-      })
-    }
-  })
-})
+router.get('/secure', verifyToken, (req:any, res) => {
+        res.json({
+            message: 'Secure Route',
+            authData: req.authData,
+        });
+});
 
-router.post('/secure', verifyToken, (req, res) => {
-  jwt.verify(req.token, 'secretKeyHere', (err, authData) => {
-    if (err) {
-      res.sendStatus(403)
-    } else {
-      res.json({
+router.post('/secure', verifyToken, (req:any, res) => {
+    res.json({
         message: 'Secure Route',
-        authData: { authData },
-      })
-    }
-  })
-})
+        authData: req.authData,
+    });
+});
 
-router.post(
-  '/',
-  checkSchema({
+const schema: any = {
     user: {
-      isEmail: {
         isEmail: true,
-        errorMessage: 'Invalid email',
-      },
+        in: 'body',
+        trim: true,
+        errorMessage: "Invalid email",
     },
     password: {
-      isLength: {
-        errorMessage: 'Password should be at least 5 chars long',
-        options: { min: 5 },
-      },
-    },
-  }),
-  (req, res) => {
+        in: 'body',
+        isLength: {
+            errorMessage: 'Password should be at least 5 chars long and max of 10 chars long',
+            options: { min: 5, max: 10 }
+
+        },
+    }
+  };
+
+router.post('/', validationMiddleware(schema), (req, res) => {
+    
     // Mock user
     const user = {
       id: 1,
       username: 'lucas',
       email: 'lucas@gmail.com',
     }
-    const errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() })
-    }
-
     // Mock database request for user login
     if (req.body.user === 'lucas@gmail.com' && req.body.password === 'safepass') {
       jwt.sign({ user: { user } }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
@@ -84,19 +59,22 @@ router.post(
         })
       })
     } else {
-      res.send('Your credentials are invalid')
+        throw new BadRequestError({
+            error: "Your credentials are invalid"
+            });
     }
   },
 )
 
 function verifyToken(req, res, next) {
-  const authToken = req.headers.authorization
-  if (typeof authToken !== 'undefined') {
-    req.token = authToken
-    next()
-  } else {
-    res.sendStatus(403)
-  }
+    const authToken = req.headers['authorization'];
+    jwt.verify(authToken, 'secretKeyHere', (err, authData) => {
+        if(err) {
+            throw new UnauthorizedError();
+        }
+        req.authData = authData;     
+        next();
+    });       
 }
 
 export = router
