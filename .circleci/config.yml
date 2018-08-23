@@ -24,13 +24,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run: npm run lint
-      - run: npm run test-ci
-
-      - deploy:
-          command: |
-            bash ./.circleci/add-ssh-hosts.sh
-            if [ "${CIRCLE_BRANCH}" == "development" ] || [ "${CIRCLE_BRANCH}" == "master" ]; then
-              git remote -v
-              bash ./.circleci/install-packages.sh
-              bash ./.circleci/deploy-heroku.sh $CIRCLE_BRANCH
-            fi
+      - run: npm run test
