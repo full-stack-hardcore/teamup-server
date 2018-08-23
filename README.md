@@ -7,10 +7,8 @@ Simple node + express server implementing a REST API
 - Node.js
 - Express
 - JWT Authentication
-
-### Version
-
-0.1.0
+- PostGres
+- Docker
 
 ## Usage
 
