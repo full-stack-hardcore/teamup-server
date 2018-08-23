@@ -24,7 +24,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run: npm run lint
-      - run: npm run test-ci
+      - run: npm run test
 
       - deploy:
           command: |
