@@ -14,15 +14,29 @@ export class UserModel {
       password: data.password,
       email: data.email,
     }
-    console.log(data)
 
-    const userIds = await knex('user').insert(user, 'user_id')
-    const userIdType = typeof userIds
-    const userId = userIdType === 'number' || userIdType === 'string' ? userIds : userIds[0]
+    const userId = await knex('user').insert(user, 'user_id')
 
     return {
       id: userId,
       ...user,
     }
+  }
+
+  static async getByEmail(email) {
+    const user = await knex('user')
+      .select({ userId: 'user.user_id', password: 'user.password' })
+      .where('email', email)
+      .first()
+
+    return user
+  }
+
+  static async update(userId, data) {
+    await knex('user')
+      .where('user_id', userId)
+      .update(data)
+
+    return true
   }
 }

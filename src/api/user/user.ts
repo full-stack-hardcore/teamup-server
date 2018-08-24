@@ -50,4 +50,33 @@ router.post(
   }),
 )
 
+router.post(
+  '/edit',
+  validationMiddleware(schema),
+  asyncHandler(async (req, res) => {
+    const user = await UserModel.getByEmail(req.body.email)
+    const data = {
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+    }
+    if (!user) {
+      throw new BadRequestError({
+        error: 'User not found.',
+      })
+    }
+    if (req.body.password !== user.password) {
+      throw new BadRequestError({
+        error: 'Your credentials are invalid',
+      })
+    }
+    const updatedUser = await UserModel.update(user.userId, data)
+    if (user) {
+      res.send('User updated successfully')
+    } else {
+      throw new BadRequestError()
+    }
+  }),
+)
+
 export = router
