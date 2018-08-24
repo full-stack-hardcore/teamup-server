@@ -52,3 +52,9 @@ DB_USER=postgres
 DB_PASSWORD=password
 DB_NAME=gretel
 ```
+
+## Migrations
+
+```sh
+$ npm run migrate
+```
