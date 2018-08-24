@@ -29,10 +29,10 @@ router.post('/secure', verifyToken, (req: any, res) => {
 
 const schema: any = {
   email: {
-    // isEmail: true,
-    // in: 'body',
-    // trim: true,
-    // errorMessage: 'Invalid email',
+    isEmail: true,
+    in: 'body',
+    trim: true,
+    errorMessage: 'Invalid email',
   },
   password: {
     in: 'body',
