@@ -23,6 +23,14 @@ export class UserModel {
     }
   }
 
+  static async delete(userId) {
+    await knex('user')
+      .where('user_id', userId)
+      .del()
+
+    return true
+  }
+
   static async getByEmail(email) {
     const user = await knex('user')
       .select({ userId: 'user.user_id', password: 'user.password' })
