@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/full-stack-hardcore/teamup-server/tree/master.svg?style=svg)](https://circleci.com/gh/full-stack-hardcore/teamup-server/tree/master)
+
 # Team Up Server API
 
 Simple node + express server implementing a REST API
@@ -51,4 +53,10 @@ DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=password
 DB_NAME=gretel
+```
+
+## Migrations
+
+```sh
+$ npm run migrate
 ```
