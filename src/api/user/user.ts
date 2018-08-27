@@ -50,8 +50,8 @@ router.post(
   }),
 )
 
-router.post(
-  '/edit',
+router.patch(
+  '/',
   validationMiddleware(schema),
   asyncHandler(async (req, res) => {
     const user = await UserModel.getByEmail(req.body.email)
