@@ -7,16 +7,14 @@ export class LoginModel {
       .from('user')
       .select('user.*')
       .where('user.email', email)
+      .andWhere('user.password', password)
       .first()
     if (!user) {
       throw new BadRequestError({
         error: 'User not found.',
       })
     }
-    if (password === user.password) {
-      return user
-    } else {
-      return false
-    }
+
+    return user
   }
 }

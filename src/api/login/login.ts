@@ -52,17 +52,11 @@ router.post(
       password: req.body.password,
     }
     const user = await LoginModel.verify(data)
-    if (user) {
-      jwt.sign({ user: { user } }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
-        res.json({
-          token: { token },
-        })
+    jwt.sign({ user: { user } }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
+      res.json({
+        token: { token },
       })
-    } else {
-      throw new BadRequestError({
-        error: 'Your credentials are invalid',
-      })
-    }
+    })
   }),
 )
 
