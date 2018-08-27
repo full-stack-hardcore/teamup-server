@@ -82,9 +82,9 @@ router.post(
 
 router.delete(
   '/',
-  asyncHandler(async (req, res) => {
-    const authToken = req.headers.authorization
-    const userData = jwt.verify(authToken, 'secretKeyHere')
+  verifyToken,
+  asyncHandler(async (req: any, res) => {
+    const userData = req.authData
     const deletedSelf = UserModel.delete(userData.user.user.user_id)
     if (deletedSelf) {
       res.send('Your user was deleted successfully')
@@ -94,4 +94,14 @@ router.delete(
   }),
 )
 
+function verifyToken(req, res, next) {
+  const authToken = req.headers.authorization
+  jwt.verify(authToken, 'secretKeyHere', (err, authData) => {
+    if (err) {
+      throw new UnauthorizedError()
+    }
+    req.authData = authData
+    next()
+  })
+}
 export = router
