@@ -29,7 +29,7 @@ const schema: any = {
 }
 
 router.post(
-  '/create',
+  '/',
   validationMiddleware(schema),
   asyncHandler(async (req, res) => {
     const data = {
