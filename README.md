@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/full-stack-hardcore/teamup-server/tree/master.svg?style=svg)](https://circleci.com/gh/full-stack-hardcore/teamup-server/tree/master)
+
 # Team Up Server API
 
 Simple node + express server implementing a REST API
