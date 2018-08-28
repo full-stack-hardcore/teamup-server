@@ -18,6 +18,16 @@ const schema: any = {
     in: 'body',
     trim: true,
     errorMessage: 'Invalid email',
+    custom: {
+      options: asyncHandler(async (value) => {
+        const user = await UserModel.getByEmail(value)
+        if (user) {
+          throw new BadRequestError('Email already exists')
+        }
+
+        return
+      }),
+    },
   },
   password: {
     in: 'body',

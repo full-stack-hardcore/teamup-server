@@ -9,19 +9,22 @@ interface UserInterface {
 
 export class UserModel {
   static async create(data): Promise<UserInterface> {
-    const user = {
-      name: data.name,
-      password: data.password,
-      email: data.email,
-    }
-
-    const userIds = await knex('user').insert(user, 'user_id')
+    const userIds = await knex('user').insert(data, 'user_id')
     const userIdType = typeof userIds
     const userId = userIdType === 'number' || userIdType === 'string' ? userIds : userIds[0]
 
     return {
       id: userId,
-      ...user,
+      ...data,
     }
+  }
+
+  static async getByEmail(email) {
+    const user = await knex('user')
+      .select({ userId: 'user.user_id', password: 'user.password' })
+      .where('email', email)
+      .first()
+
+    return user
   }
 }
