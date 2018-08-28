@@ -89,14 +89,13 @@ router.patch(
   validationMiddleware(editSchema),
   verifyToken,
   asyncHandler(async (req: any, res) => {
-    const user = req.authData.user.user
+    const user = req.authData.user
     const data = req.body
     const updatedUser = await UserModel.update(user.user_id, data)
-    if (updatedUser) {
-      res.send('User updated successfully')
-    } else {
+    if (!updatedUser) {
       throw new BadRequestError()
     }
+    res.sendStatus(200)
   }),
 )
 function verifyToken(req, res, next) {

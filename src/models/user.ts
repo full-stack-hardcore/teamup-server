@@ -1,3 +1,4 @@
+import { BadRequestError } from 'error-middleware/errors'
 import knex from '../../knex'
 
 interface UserInterface {
@@ -33,9 +34,13 @@ export class UserModel {
   }
 
   static async update(userId, data) {
-    await knex('user')
+    const updated = await knex('user')
       .where('user_id', userId)
       .update(data)
+
+    if (!updated) {
+      throw new Error()
+    }
 
     return true
   }

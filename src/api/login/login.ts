@@ -52,9 +52,9 @@ router.post(
       password: req.body.password,
     }
     const user = await LoginModel.verify(data)
-    jwt.sign({ user: { user } }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
+    jwt.sign({ user: user }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
       res.json({
-        token: { token },
+        token: token,
       })
     })
   }),
