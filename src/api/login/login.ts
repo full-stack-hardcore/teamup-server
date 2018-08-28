@@ -53,9 +53,9 @@ router.post(
     }
     const user = await LoginModel.verify(data)
     if (user) {
-      jwt.sign({ user: user }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
+      jwt.sign({ user }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
         res.json({
-          token: token,
+          token,
         })
       })
     } else {
