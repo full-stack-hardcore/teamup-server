@@ -9,9 +9,7 @@ interface UserInterface {
 
 export class UserModel {
   static async create(data): Promise<UserInterface> {
-    const userIds = await knex('user').insert(data, 'user_id')
-    const userIdType = typeof userIds
-    const userId = userIdType === 'number' || userIdType === 'string' ? userIds : userIds[0]
+    const userId = await knex('user').insert(data, 'user_id')
 
     return {
       id: userId,

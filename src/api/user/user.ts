@@ -49,11 +49,13 @@ router.post(
     }
     const user = await UserModel.create(data)
     if (user) {
-      res.json({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      })
+      res
+        .json({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        })
+        .status(201)
     } else {
       throw new BadRequestError()
     }
