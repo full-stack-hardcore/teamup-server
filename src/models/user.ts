@@ -14,7 +14,6 @@ export class UserModel {
       password: data.password,
       email: data.email,
     }
-    console.log(data)
 
     const userIds = await knex('user').insert(user, 'user_id')
     const userIdType = typeof userIds
