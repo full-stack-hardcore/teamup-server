@@ -85,12 +85,9 @@ router.delete(
   verifyToken,
   asyncHandler(async (req: any, res) => {
     const userData = req.authData
-    const deletedSelf = UserModel.delete(userData.user.user.user_id)
-    if (deletedSelf) {
-      res.send('Your user was deleted successfully')
-    } else {
-      throw new BadRequestError()
-    }
+    await UserModel.delete(userData.user.user_id)
+
+    res.sendStatus(200)
   }),
 )
 
