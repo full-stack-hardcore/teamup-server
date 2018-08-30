@@ -43,18 +43,5 @@ export class UserModel {
     return await knex('user')
       .where('user_id', userId)
       .update(data)
-
-    console.log(
-      'HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE ',
-    )
-    // console.log(updated)
-    console.log(
-      'HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE ',
-    )
-    // if (!updated) {
-    //   return false
-    // }
-
-    // return true
   }
 }
