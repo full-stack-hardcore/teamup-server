@@ -1,14 +1,11 @@
-import { BadRequestError, UnauthorizedError } from 'error-middleware/errors'
+import { BadRequestError } from 'error-middleware/errors'
 import { validationMiddleware } from 'error-middleware/middlewares'
 import * as express from 'express'
 import * as asyncHandler from 'express-async-handler'
-import * as jwt from 'jsonwebtoken'
 
-import { userSchema, userEditSchema } from '../../lib/userSchema'
+import { userCreateSchema, userEditSchema } from '../../lib/userSchema'
 import { verifyToken } from '../../middleware/authentication'
 import { UserModel } from '../../models/user'
-
-const { checkSchema, validationResult } = require('express-validator/check')
 
 const router = express.Router()
 
@@ -17,8 +14,8 @@ router.get('/', (req, res) => {
 })
 
 router.post(
-  '/create',
-  validationMiddleware(userSchema),
+  '/',
+  validationMiddleware(userCreateSchema),
   asyncHandler(async (req, res) => {
     const data = {
       name: req.body.name,
