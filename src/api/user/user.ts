@@ -3,6 +3,9 @@ import { validationMiddleware } from 'error-middleware/middlewares'
 import * as express from 'express'
 import * as asyncHandler from 'express-async-handler'
 import * as jwt from 'jsonwebtoken'
+
+import { userSchema, userEditSchema } from '../../lib/userSchema'
+import { verifyToken } from '../../middleware/authentication'
 import { UserModel } from '../../models/user'
 
 const { checkSchema, validationResult } = require('express-validator/check')
@@ -13,25 +16,9 @@ router.get('/', (req, res) => {
   res.send('Hello from user API')
 })
 
-const schema: any = {
-  email: {
-    isEmail: true,
-    in: 'body',
-    trim: true,
-    errorMessage: 'Invalid email',
-  },
-  password: {
-    in: 'body',
-    isLength: {
-      errorMessage: 'Password should be at least 5 chars long and max of 10 chars long',
-      options: { min: 5, max: 10 },
-    },
-  },
-}
-
 router.post(
   '/create',
-  validationMiddleware(schema),
+  validationMiddleware(userSchema),
   asyncHandler(async (req, res) => {
     const data = {
       name: req.body.name,
@@ -53,7 +40,7 @@ router.post(
 
 router.post(
   '/edit',
-  validationMiddleware(schema),
+  validationMiddleware(userEditSchema),
   asyncHandler(async (req, res) => {
     const user = await UserModel.getByEmail(req.body.email)
     const data = {
@@ -91,14 +78,4 @@ router.delete(
   }),
 )
 
-function verifyToken(req, res, next) {
-  const authToken = req.headers.authorization
-  jwt.verify(authToken, 'secretKeyHere', (err, authData) => {
-    if (err) {
-      throw new UnauthorizedError()
-    }
-    req.authData = authData
-    next()
-  })
-}
 export = router
