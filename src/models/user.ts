@@ -45,7 +45,7 @@ export class UserModel {
       .update(data)
 
     if (!updated) {
-      throw new Error()
+      return false
     }
 
     return true
