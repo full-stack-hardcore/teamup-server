@@ -20,6 +20,14 @@ export const userSchema = {
 }
 
 export const userEditSchema = {
+  name: {
+    in: 'body',
+    isLength: {
+      errorMessage: 'name should be at least 3 chars long and max of 100 chars long',
+      options: { min: 3, max: 100 },
+    },
+    optional: true,
+  },
   email: {
     isEmail: true,
     in: 'body',
@@ -38,6 +46,13 @@ export const userEditSchema = {
 }
 
 export const userCreateSchema = {
+  name: {
+    in: 'body',
+    isLength: {
+      errorMessage: 'name should be at least 3 chars long and max of 100 chars long',
+      options: { min: 3, max: 100 },
+    },
+  },
   email: {
     isEmail: true,
     in: 'body',

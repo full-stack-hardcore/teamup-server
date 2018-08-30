@@ -32,7 +32,7 @@ router.post(
 
 router.patch(
   '/',
-  validationMiddleware(editSchema),
+  validationMiddleware(userEditSchema),
   verifyToken,
   asyncHandler(async (req: any, res) => {
     const user = req.authData.user
@@ -44,16 +44,6 @@ router.patch(
     res.sendStatus(200)
   }),
 )
-function verifyToken(req, res, next) {
-  const authToken = req.headers.authorization
-  jwt.verify(authToken, 'secretKeyHere', (err, authData) => {
-    if (err) {
-      throw new UnauthorizedError()
-    }
-    req.authData = authData
-    next()
-  })
-}
 
 router.delete(
   '/',
