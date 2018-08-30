@@ -10,17 +10,11 @@ interface UserInterface {
 
 export class UserModel {
   static async create(data): Promise<UserInterface> {
-    const user = {
-      name: data.name,
-      password: data.password,
-      email: data.email,
-    }
-
-    const userId = await knex('user').insert(user, 'user_id')
+    const userId = await knex('user').insert(data, 'user_id')
 
     return {
       id: userId,
-      ...user,
+      ...data,
     }
   }
 
