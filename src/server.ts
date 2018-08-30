@@ -1,9 +1,9 @@
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
 
-import errorMiddleware from 'error-middleware';
+import errorMiddleware from 'error-middleware'
 
-import * as masterRouter from './api';
+import * as masterRouter from './api'
 
 const app: express.Application = express()
 const port: string = process.env.PORT || '3000'
@@ -15,9 +15,9 @@ app.use(
   }),
 )
 
-app.use('/api', masterRouter);
-app.use(errorMiddleware);
+app.use('/api', masterRouter)
+app.use(errorMiddleware)
 
 app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}/`);
-});
+  console.log(`Listening at http://localhost:${port}/`)
+})

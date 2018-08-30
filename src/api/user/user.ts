@@ -2,10 +2,10 @@ import { BadRequestError, UnauthorizedError } from 'error-middleware/errors'
 import { validationMiddleware } from 'error-middleware/middlewares'
 import * as express from 'express'
 import * as asyncHandler from 'express-async-handler'
-import * as jwt from 'jsonwebtoken'
-import { UserModel } from '../../models/user'
 
-const { checkSchema, validationResult } = require('express-validator/check')
+import { userCreateSchema, userEditSchema } from '../../lib/userSchema'
+import { verifyToken } from '../../middleware/authentication'
+import { UserModel } from '../../models/user'
 
 const router = express.Router()
 
@@ -13,58 +13,9 @@ router.get('/', (req, res) => {
   res.send('Hello from user API')
 })
 
-const schema: any = {
-  email: {
-    isEmail: true,
-    in: 'body',
-    trim: true,
-    errorMessage: 'Invalid email',
-  },
-  password: {
-    in: 'body',
-    isLength: {
-      errorMessage: 'Password should be at least 5 chars long and max of 10 chars long',
-      options: { min: 5, max: 10 },
-    },
-  },
-  name: {
-    in: 'body',
-    isLength: {
-      errorMessage: 'name should be at least 3 chars long and max of 100 chars long',
-      options: { min: 3, max: 50 },
-    },
-  },
-}
-
-const editSchema: any = {
-  email: {
-    isEmail: true,
-    in: 'body',
-    trim: true,
-    errorMessage: 'Invalid email',
-    optional: true,
-  },
-  password: {
-    in: 'body',
-    isLength: {
-      errorMessage: 'Password should be at least 5 chars long and max of 10 chars long',
-      options: { min: 5, max: 10 },
-    },
-    optional: true,
-  },
-  name: {
-    in: 'body',
-    isLength: {
-      errorMessage: 'name should be at least 3 chars long and max of 100 chars long',
-      options: { min: 3, max: 50 },
-    },
-    optional: true,
-  },
-}
-
 router.post(
-  '/create',
-  validationMiddleware(schema),
+  '/',
+  validationMiddleware(userCreateSchema),
   asyncHandler(async (req, res) => {
     const data = {
       name: req.body.name,
@@ -72,15 +23,10 @@ router.post(
       password: req.body.password,
     }
     const user = await UserModel.create(data)
-    if (user) {
-      res.json({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      })
-    } else {
+    if (!user) {
       throw new BadRequestError()
     }
+    res.sendStatus(201)
   }),
 )
 
@@ -108,5 +54,16 @@ function verifyToken(req, res, next) {
     next()
   })
 }
+
+router.delete(
+  '/',
+  verifyToken,
+  asyncHandler(async (req: any, res) => {
+    const userData = req.authData
+    await UserModel.delete(userData.user.user_id)
+
+    res.sendStatus(200)
+  }),
+)
 
 export = router

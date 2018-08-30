@@ -3,6 +3,9 @@ import { validationMiddleware } from 'error-middleware/middlewares'
 import * as express from 'express'
 import * as asyncHandler from 'express-async-handler'
 import * as jwt from 'jsonwebtoken'
+
+import { userSchema } from '../../lib/userSchema'
+import { verifyToken } from '../../middleware/authentication'
 import { LoginModel } from '../../models/login'
 
 const router = express.Router()
@@ -27,48 +30,27 @@ router.post('/secure', verifyToken, (req: any, res) => {
   })
 })
 
-const schema: any = {
-  email: {
-    isEmail: true,
-    in: 'body',
-    trim: true,
-    errorMessage: 'Invalid email',
-  },
-  password: {
-    in: 'body',
-    isLength: {
-      errorMessage: 'Password should be at least 5 chars long and max of 10 chars long',
-      options: { min: 5, max: 10 },
-    },
-  },
-}
-
 router.post(
   '/',
-  validationMiddleware(schema),
+  validationMiddleware(userSchema),
   asyncHandler(async (req, res) => {
     const data = {
       email: req.body.email,
       password: req.body.password,
     }
     const user = await LoginModel.verify(data)
-    jwt.sign({ user: user }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
-      res.json({
-        token: token,
+    if (user) {
+      jwt.sign({ user }, 'secretKeyHere', { expiresIn: '30s' }, (err, token) => {
+        res.json({
+          token,
+        })
       })
-    })
+    } else {
+      throw new BadRequestError({
+        error: 'Your credentials are invalid',
+      })
+    }
   }),
 )
-
-function verifyToken(req, res, next) {
-  const authToken = req.headers['authorization']
-  jwt.verify(authToken, 'secretKeyHere', (err, authData) => {
-    if (err) {
-      throw new UnauthorizedError()
-    }
-    req.authData = authData
-    next()
-  })
-}
 
 export = router
