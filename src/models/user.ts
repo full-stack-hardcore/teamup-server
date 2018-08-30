@@ -40,14 +40,21 @@ export class UserModel {
   }
 
   static async update(userId, data) {
-    const updated = await knex('user')
+    return await knex('user')
       .where('user_id', userId)
       .update(data)
 
-    if (!updated) {
-      return false
-    }
+    console.log(
+      'HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE ',
+    )
+    // console.log(updated)
+    console.log(
+      'HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE ',
+    )
+    // if (!updated) {
+    //   return false
+    // }
 
-    return true
+    // return true
   }
 }
