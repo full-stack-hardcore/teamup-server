@@ -1,3 +1,4 @@
+import { BadRequestError } from 'error-middleware/errors'
 import knex from '../../knex'
 
 interface UserInterface {
@@ -17,6 +18,18 @@ export class UserModel {
     }
   }
 
+  static async delete(userId) {
+    const deleted = await knex('user')
+      .where('user_id', userId)
+      .del()
+
+    if (deleted === 0) {
+      throw new BadRequestError('Invalid user ID')
+    }
+
+    return
+  }
+
   static async getByEmail(email) {
     const user = await knex('user')
       .select({ userId: 'user.user_id', password: 'user.password' })
@@ -24,5 +37,13 @@ export class UserModel {
       .first()
 
     return user
+  }
+
+  static async update(userId, data) {
+    await knex('user')
+      .where('user_id', userId)
+      .update(data)
+
+    return true
   }
 }
