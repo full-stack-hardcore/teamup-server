@@ -40,10 +40,8 @@ export class UserModel {
   }
 
   static async update(userId, data) {
-    await knex('user')
+    return await knex('user')
       .where('user_id', userId)
       .update(data)
-
-    return true
   }
 }

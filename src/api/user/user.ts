@@ -1,4 +1,4 @@
-import { BadRequestError } from 'error-middleware/errors'
+import { BadRequestError, UnauthorizedError } from 'error-middleware/errors'
 import { validationMiddleware } from 'error-middleware/middlewares'
 import * as express from 'express'
 import * as asyncHandler from 'express-async-handler'
@@ -30,32 +30,18 @@ router.post(
   }),
 )
 
-router.post(
-  '/edit',
+router.patch(
+  '/',
   validationMiddleware(userEditSchema),
-  asyncHandler(async (req, res) => {
-    const user = await UserModel.getByEmail(req.body.email)
-    const data = {
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    }
-    if (!user) {
-      throw new BadRequestError({
-        error: 'User not found.',
-      })
-    }
-    if (req.body.password !== user.password) {
-      throw new BadRequestError({
-        error: 'Your credentials are invalid',
-      })
-    }
-    const updatedUser = await UserModel.update(user.userId, data)
-    if (user) {
-      res.send('User updated successfully')
-    } else {
+  verifyToken,
+  asyncHandler(async (req: any, res) => {
+    const user = req.authData.user
+    const data = req.body
+    const updatedUser = await UserModel.update(user.user_id, data)
+    if (!updatedUser) {
       throw new BadRequestError()
     }
+    res.sendStatus(200)
   }),
 )
 
