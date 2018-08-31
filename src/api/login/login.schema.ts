@@ -1,4 +1,4 @@
-export const userSchema = {
+export const loginSchema = {
   email: {
     isEmail: true,
     in: 'body',

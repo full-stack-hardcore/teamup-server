@@ -4,13 +4,13 @@ import * as express from 'express'
 import * as asyncHandler from 'express-async-handler'
 
 import { Login } from '../../services/login.service'
-import { userSchema } from './login.schema'
+import { loginSchema } from './login.schema'
 
 const router = express.Router()
 
 router.post(
   '/',
-  validationMiddleware(userSchema),
+  validationMiddleware(loginSchema),
   asyncHandler(async (req, res) => {
     const token = await Login.login(req.body)
     if (!token) {
