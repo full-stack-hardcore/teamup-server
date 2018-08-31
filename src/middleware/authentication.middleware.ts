@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken'
 
 export function verifyToken(req, res, next) {
   const authToken = req.headers.authorization
-  jwt.verify(authToken, 'secretKeyHere', (err, authData) => {
+  jwt.verify(authToken, process.env.SECRET_KEY, (err, authData) => {
     if (err) {
       throw new UnauthorizedError()
     }

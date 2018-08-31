@@ -14,7 +14,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const token = await Login.login(req.body)
     if (!token) {
-      throw new BadRequestError({ error: 'Your credentials are invalid' })
+      throw new BadRequestError('Your credentials are invalid')
     }
     res.json({
       token,

@@ -17,12 +17,7 @@ export const userCreateSchema = {
     errorMessage: 'Email already exists',
     custom: {
       options: asyncHandler(async (value) => {
-        const user = await UserModel.getByEmail(value)
-        if (user) {
-          return false
-        }
-
-        return
+        return await UserModel.emailAvailable(value)
       }),
     },
   },
