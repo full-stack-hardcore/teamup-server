@@ -1,4 +1,4 @@
-import { BadRequestError, UnauthorizedError } from 'error-middleware/errors'
+import { UnauthorizedError } from 'error-middleware/errors'
 import * as jwt from 'jsonwebtoken'
 
 export function verifyToken(req, res, next) {
