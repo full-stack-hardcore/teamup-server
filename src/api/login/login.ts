@@ -4,13 +4,12 @@ import * as express from 'express'
 import * as asyncHandler from 'express-async-handler'
 import * as jwt from 'jsonwebtoken'
 
+import { keys } from '../../config/config'
 import { userSchema } from '../../lib/userSchema'
 import { verifyToken } from '../../middleware/authentication'
 import { LoginModel } from '../../models/login'
 
 const router = express.Router()
-
-const { checkSchema, validationResult } = require('express-validator/check')
 
 router.get('/', verifyToken, (req, res) => {
   res.send('Hello from login')
@@ -40,7 +39,7 @@ router.post(
     }
     const user = await LoginModel.verify(data)
     if (user) {
-      jwt.sign({ user }, 'secretKeyHere', { expiresIn: '300s' }, (err, token) => {
+      jwt.sign({ user }, keys.secret, { expiresIn: '300s' }, (err, token) => {
         res.json({
           token,
         })
