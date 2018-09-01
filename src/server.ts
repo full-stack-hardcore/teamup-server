@@ -7,7 +7,7 @@ import * as masterRouter from './api'
 import { server } from './config/config'
 
 const app: express.Application = express()
-const port: string = server.port || '3000'
+const port: string = server.port
 
 app.use(bodyParser.json())
 app.use(
