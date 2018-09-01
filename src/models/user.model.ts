@@ -1,4 +1,3 @@
-import { BadRequestError } from 'error-middleware/errors'
 import knex from '../config/knex'
 
 interface UserInterface {
