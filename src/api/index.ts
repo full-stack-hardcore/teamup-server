@@ -1,5 +1,5 @@
 import * as express from 'express'
-import * as loginRouter from './login'
+import * as loginRouter from './login/login'
 import * as userRouter from './user'
 import * as welcomeRouter from './welcome'
 

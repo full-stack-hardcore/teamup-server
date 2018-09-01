@@ -8,6 +8,7 @@ import * as masterRouter from './api'
 import { server } from './config/config'
 
 dotenv.config()
+
 const app: express.Application = express()
 const port: string = server.port || '3000'
 
