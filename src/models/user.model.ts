@@ -23,11 +23,7 @@ export class UserModel {
       .where('user_id', userId)
       .del()
 
-    if (deleted === 0) {
-      throw new BadRequestError('Invalid user ID')
-    }
-
-    return
+    return deleted
   }
 
   static async getByEmail(email) {
@@ -37,6 +33,17 @@ export class UserModel {
       .first()
 
     return user
+  }
+
+  static async emailAvailable(email) {
+    const user = await knex('user')
+      .select({ userId: 'user.user_id', password: 'user.password' })
+      .where('email', email)
+      .first()
+
+    if (user) {
+      return false
+    }
   }
 
   static async update(userId, data) {

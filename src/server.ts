@@ -3,7 +3,10 @@ import * as express from 'express'
 
 import errorMiddleware from 'error-middleware'
 
+import * as dotenv from 'dotenv'
 import * as masterRouter from './api'
+
+dotenv.config()
 
 const app: express.Application = express()
 const port: string = process.env.PORT || '3000'
