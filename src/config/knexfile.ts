@@ -1,6 +1,6 @@
 import { database } from './config'
 
-export const config = {
+module.exports = {
   client: 'pg',
   connection: {
     host: database.host,
@@ -10,7 +10,6 @@ export const config = {
     database: database.name,
   },
   migrations: {
-    directory: './db/migrations',
+    directory: '../../db/migrations',
   },
-  useNullAsDefault: true,
 }

@@ -1,4 +1,3 @@
 import * as knex from 'knex'
-import { config } from './knexfile'
-
+import * as config from './knexfile'
 export default knex(config)

@@ -8,7 +8,7 @@
     "watch": "ts-node-dev --poll --no-notify src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 0",
     "tsc": "tsc",
-    "migrate": "knex migrate:latest",
+    "migrate": "knex --knexfile src/config/knexfile.ts migrate:latest ",
     "lint": " tslint src/**/*.ts"
   },
   "keywords": [],
