@@ -7,7 +7,6 @@ import * as masterRouter from './api'
 import { server } from './config/config'
 
 const app: express.Application = express()
-const port: string = server.port
 
 app.use(bodyParser.json())
 app.use(
@@ -19,6 +18,6 @@ app.use(
 app.use('/api', masterRouter)
 app.use(errorMiddleware)
 
-app.listen(port, () => {
-  console.log(`Listening at http://${server.host}:${port}/`)
+app.listen(server.port, () => {
+  console.log(`Listening at http://${server.host}:${server.port}/`)
 })
