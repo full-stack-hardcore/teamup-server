@@ -3,6 +3,7 @@ version: '3'
 services:
   web:
     image: node:8.11.3
+    network_mode: host
     command: npm run watch
     working_dir: /usr/src/app
     volumes:
