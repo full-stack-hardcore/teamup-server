@@ -8,7 +8,7 @@ export const database = {
   port: 5432,
   user: 'postgres',
   password: 'password',
-  name: 'team-up',
+  database: 'team-up',
 }
 
 export const keys = {
