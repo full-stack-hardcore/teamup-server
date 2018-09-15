@@ -5,7 +5,7 @@ import { LoginModel } from '../models/login.model'
 
 export class Login {
   static generateToken(user) {
-    return jwt.sign({ user }, process.env.SECRET_KEY, { expiresIn: '300s' })
+    return jwt.sign({ user }, 'secretKeyHere', { expiresIn: '300s' })
   }
 
   static async login(data) {

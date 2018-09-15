@@ -6,7 +6,7 @@
     "server": "ts-node src/server.ts",
     "start": "ts-node src/server.ts",
     "watch": "ts-node-dev --poll --no-notify src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "jest",
     "tsc": "tsc",
     "migrate": "knex migrate:latest",
     "lint": " tslint src/**/*.ts"
@@ -31,11 +31,36 @@
     "typescript": "^3.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.2",
     "husky": "^1.0.0-rc.13",
+    "jest": "^23.6.0",
     "lint-staged": "^7.2.2",
     "prettier": "^1.14.2",
+    "ts-jest": "^23.1.4",
     "tslint": "^5.11.0",
     "tslint-config-codingwise": "0.0.5"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/src/.*|(\\.|/)(test|spec))\\.(test).(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "node_modules",
+      ".schema.ts",
+      "server.ts",
+      "index.ts",
+      "authentication.middleware.ts",
+      "api"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   },
   "husky": {
     "hooks": {
