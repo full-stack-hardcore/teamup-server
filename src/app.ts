@@ -20,4 +20,4 @@ app.use(
 app.use('/api', masterRouter)
 app.use(errorMiddleware)
 
-module.exports = app
+export = app

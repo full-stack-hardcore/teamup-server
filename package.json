@@ -9,7 +9,7 @@
     "test": "jest",
     "silent-test": "jest --silent",
     "tsc": "tsc",
-    "migrate": "knex migrate:latest",
+    "migrate": "knex --knexfile src/config/knexfile.ts migrate:latest ",
     "lint": " tslint src/**/*.ts"
   },
   "keywords": [],

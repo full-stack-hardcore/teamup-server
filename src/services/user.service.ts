@@ -1,6 +1,5 @@
 import { BadRequestError } from 'error-middleware/errors'
 
-import * as jwt from 'jsonwebtoken'
 import { UserModel } from '../models/user.model'
 
 export class User {

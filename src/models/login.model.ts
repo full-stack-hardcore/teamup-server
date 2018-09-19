@@ -1,5 +1,5 @@
 import { BadRequestError } from 'error-middleware/errors'
-import knex from '../../knex'
+import knex from '../config/knex'
 
 export class LoginModel {
   static async verify({ email, password }) {

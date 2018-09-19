@@ -1,11 +1,12 @@
 import { BadRequestError } from 'error-middleware/errors'
-
 import * as jwt from 'jsonwebtoken'
+
+import { keys } from '../config/config'
 import { LoginModel } from '../models/login.model'
 
 export class Login {
   static generateToken(user) {
-    return jwt.sign({ user }, 'secretKeyHere', { expiresIn: '300s' })
+    return jwt.sign({ user }, keys.secret, { expiresIn: '300s' })
   }
 
   static async login(data) {
