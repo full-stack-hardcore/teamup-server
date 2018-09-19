@@ -1,4 +1,4 @@
-const supertest = require('supertest')
+import supertest = require('supertest')
 
 module.exports = {
   supertest,
