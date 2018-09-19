@@ -1,5 +1,5 @@
 const pg = require('pg');
-pg.defaults.ssl = process.env.NODE_ENV !== 'development';
+// pg.defaults.ssl = process.env.NODE_ENV !== 'development';
 
 module.exports = {
   development: {

@@ -7,6 +7,7 @@
     "start": "ts-node src/server.ts",
     "watch": "ts-node-dev --poll --no-notify src/server.ts",
     "test": "jest",
+    "silent-test": "jest --silent",
     "tsc": "tsc",
     "migrate": "knex migrate:latest",
     "lint": " tslint src/**/*.ts"
@@ -32,10 +33,12 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.2",
+    "@types/supertest": "^2.0.6",
     "husky": "^1.0.0-rc.13",
     "jest": "^23.6.0",
     "lint-staged": "^7.2.2",
     "prettier": "^1.14.2",
+    "supertest": "^3.3.0",
     "ts-jest": "^23.1.4",
     "tslint": "^5.11.0",
     "tslint-config-codingwise": "0.0.5"
@@ -50,8 +53,7 @@
       ".schema.ts",
       "server.ts",
       "index.ts",
-      "authentication.middleware.ts",
-      "api"
+      "authentication.middleware.ts"
     ],
     "moduleFileExtensions": [
       "ts",
