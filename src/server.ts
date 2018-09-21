@@ -3,13 +3,10 @@ import * as express from 'express'
 
 import errorMiddleware from 'error-middleware'
 
-import * as dotenv from 'dotenv'
 import * as masterRouter from './api'
-
-dotenv.config()
+import { server } from './config/config'
 
 const app: express.Application = express()
-const port: string = process.env.PORT || '3000'
 
 app.use(bodyParser.json())
 app.use(
@@ -21,6 +18,6 @@ app.use(
 app.use('/api', masterRouter)
 app.use(errorMiddleware)
 
-app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/`)
+app.listen(server.port, () => {
+  console.log(`Listening at http://${server.host}:${server.port}/`)
 })

@@ -1,5 +1,4 @@
-import { BadRequestError } from 'error-middleware/errors'
-import knex from '../../knex'
+import knex from '../config/knex'
 
 interface UserInterface {
   id: any
