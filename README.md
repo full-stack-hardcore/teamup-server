@@ -60,3 +60,17 @@ DB_NAME=gretel
 ```sh
 $ npm run migrate
 ```
+
+## Testing
+
+To test the project using Jest:
+
+```sh
+$ npm test
+```
+
+To test the project using Jest, hiding the console logs from module loggers:
+
+```sh
+$ npm run silent-test
+```
