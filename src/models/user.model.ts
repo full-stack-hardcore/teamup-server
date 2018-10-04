@@ -34,6 +34,15 @@ export class UserModel {
     return user
   }
 
+  static async getById(id) {
+    const user = await knex('user')
+      .select({ name: 'user.name', email: 'user.email' })
+      .where('user_id', id)
+      .first()
+
+    return user
+  }
+
   static async emailAvailable(email) {
     const user = await knex('user')
       .select({ userId: 'user.user_id', password: 'user.password' })
