@@ -10,6 +10,15 @@ export class User {
     }
   }
 
+  static async get(userId) {
+    const user = await UserModel.getById(userId)
+    if (!user) {
+      throw new BadRequestError()
+    }
+
+    return user
+  }
+
   static async update(userId, data) {
     const user = await UserModel.update(userId, data)
     if (!user) {
